@@ -1,0 +1,4 @@
+streamlit
+pyngrok
+#if openai
+openai
