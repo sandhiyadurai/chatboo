@@ -100,7 +100,7 @@ if st.session_state.user_name:
         st.experimental_rerun()
 
 from pyngrok import ngrok
-!streamlit run app.py &> /dev/null &
+streamlit run app.py
 public_url = ngrok.connect(8501)
 print("🌐 App is live at:", public_url)
 
