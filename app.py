@@ -128,6 +128,6 @@ if st.session_state.user_name:
         
         # This will update query params as a way to trigger refresh
     if st.button("🔄 Refresh Chat"):
-    st.session_state.chat_history = []
-    st.session_state.name_collected = False
-    st.query_params["refresh"] = "true"
+        st.session_state.chat_history = []
+        st.session_state.name_collected = False
+        st.query_params["refresh"] = "true"
