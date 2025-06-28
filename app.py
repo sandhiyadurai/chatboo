@@ -1,11 +1,3 @@
-!pip install streamlit pyngrok
-!pip install pyngrok
-!ngrok config add-authtoken 2z2rG8u11iizsg7LKwd5j9XypNS_4v28f9455Xx4hM2FBkUHk
-!pip install streamlit pyngrok
-!pkill streamlit
-!pkill ngrok
-
-%%writefile app.py
 import streamlit as st
 
 # Page setup
@@ -105,9 +97,8 @@ if st.session_state.user_name:
         bot_response = get_bot_response(user_input, personality)
         st.session_state.chat_history.append((f"🧍‍♀️ {st.session_state.user_name}", user_input))
         st.session_state.chat_history.append((f"{personality}", bot_response))
-        st.rerun()
-!pkill streamlit  # Stop existing Streamlit servers
-!pkill ngrok 
+        st.experimental_rerun()
+
 from pyngrok import ngrok
 !streamlit run app.py &> /dev/null &
 public_url = ngrok.connect(8501)
