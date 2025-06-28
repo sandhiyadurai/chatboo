@@ -85,12 +85,15 @@ def get_bot_response(user_input, personality):
             return "📖 That’s beyond my current training data. But let’s explore it together!"
 
 # Chat UI
+# Chat interaction
 if st.session_state.user_name:
-    user_input = st.text_input("💬 Type your message and press Enter", key="input")
+    input_container = st.container()
+    with input_container:
+        user_input = st.text_input("💬 Type your message and press Enter", key="input")
 
-   if user_input and st.session_state.get("last_input") != user_input:
-    bot_response = get_bot_response(user_input, personality)
-    st.session_state.chat_history.append((f"🧍‍♀️ {st.session_state.user_name}", user_input))
-    st.session_state.chat_history.append((f"{personality}", bot_response))
-    st.session_state.last_input = user_input
-    st.experimental_set_query_params(dummy="refresh")  # Triggers a minor UI update
+    if user_input and st.session_state.get("last_input") != user_input:
+        bot_response = get_bot_response(user_input, personality)
+        st.session_state.chat_history.append((f"🧍‍♀️ {st.session_state.user_name}", user_input))
+        st.session_state.chat_history.append((f"{personality}", bot_response))
+        st.session_state.last_input = user_input
+        st.experimental_set_query_params(dummy="refresh")
