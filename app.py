@@ -40,9 +40,24 @@ if not st.session_state.name_collected:
 with st.sidebar:
     st.title("⚙️ Settings")
     personality = st.selectbox("🧠 Choose ChatBoo's Mood:", ["🤗 Friendly", "😎 Sassy", "🤓 Nerdy"])
+
+    if st.button("🧹 Clear Chat"):
+        st.session_state.chat_history = []
+        st.experimental_rerun()  # refresh the app
+
     st.markdown("### 📝 Chat History")
-    for sender, msg in st.session_state.chat_history:
-        st.markdown(f"**{sender}**: {msg}")
+    if "chat_history" in st.session_state:
+        for sender, msg in st.session_state.chat_history:
+            st.markdown(f"**{sender}**: {msg}")
+
+#typing time
+import time
+
+def typing_animation(response_text):
+    with st.spinner("ChatBoo is typing..."):
+        time.sleep(1.5)  # simulate thinking
+    return response_text
+
 
 # Response logic
 def get_bot_response(user_input, personality):
@@ -92,9 +107,27 @@ if st.session_state.user_name:
 
     if user_input and st.session_state.get("last_input") != user_input:
         bot_response = get_bot_response(user_input, personality)
+        bot_response = typing_animation(bot_response)
         st.session_state.chat_history.append((f"🧍‍♀️ {st.session_state.user_name}", user_input))
-        st.session_state.chat_history.append((f"{personality}", bot_response))
+        st.session_state.chat_history.append((f"{personality} 🤖", bot_response))
         st.session_state.last_input = user_input
+
+    import random
+
+    fun_facts = [
+    "🧠 Did you know? The first computer programmer was Ada Lovelace.",
+    "🌍 Earth is the only planet not named after a god.",
+    "🧬 Your body has more bacterial cells than human cells!",
+    "😜 Here’s a joke: Why did the programmer quit his job? Because he didn’t get arrays (a raise)!"
+    ]
+
+    if random.random() < 0.2:  # 20% chance
+    bonus = random.choice(fun_facts)
+    st.session_state.chat_history.append(("✨ ChatBoo Fun Fact", bonus))
+        
         
         # This will update query params as a way to trigger refresh
-        st.query_params["refresh"] = "true"
+    if st.button("🔄 Refresh Chat"):
+    st.session_state.chat_history = []
+    st.session_state.name_collected = False
+    st.query_params["refresh"] = "true"
