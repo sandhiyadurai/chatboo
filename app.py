@@ -3,7 +3,7 @@ import streamlit as st
 # Page setup
 st.set_page_config(page_title="ChatBoo 🧠", page_icon="💬", layout="wide")
 
-# CSS styling for sidebar and chat
+# CSS styling
 st.markdown("""
     <style>
     .css-1cpxqw2 {padding: 1rem;}
@@ -21,7 +21,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Ask for username once
+# Session states
 if "user_name" not in st.session_state:
     st.session_state.user_name = ""
 if "name_collected" not in st.session_state:
@@ -29,26 +29,25 @@ if "name_collected" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
+# Ask for username once
 if not st.session_state.name_collected:
     st.session_state.user_name = st.text_input("👤 Enter your name to start:", "")
     if st.session_state.user_name.strip() != "":
         st.session_state.name_collected = True
-        st.session_state.chat_history.append(("🤖 ChatBoo", f"Hey {st.session_state.user_name} 👋,ChatBoo here for you always!"))
+        st.session_state.chat_history.append(("🤖 ChatBoo", f"Hey {st.session_state.user_name} 👋, ChatBoo here for you always!"))
 
-# Personality selection
+# Sidebar: Mood and History
 with st.sidebar:
     st.title("⚙️ Settings")
     personality = st.selectbox("🧠 Choose ChatBoo's Mood:", ["🤗 Friendly", "😎 Sassy", "🤓 Nerdy"])
     st.markdown("### 📝 Chat History")
-    if "chat_history" in st.session_state:
-        for sender, msg in st.session_state.chat_history:
-            st.markdown(f"**{sender}**: {msg}")
+    for sender, msg in st.session_state.chat_history:
+        st.markdown(f"**{sender}**: {msg}")
 
-# Function to handle personality replies
+# Response logic
 def get_bot_response(user_input, personality):
     user_input = user_input.lower()
 
-    # Friendly
     if "friendly" in personality.lower():
         if "hello" in user_input or "hi" in user_input:
             return f"🌼 Hello {st.session_state.user_name}! I'm happy you're here! 💛"
@@ -61,7 +60,6 @@ def get_bot_response(user_input, personality):
         else:
             return "✨ I'm here for you! Ask me anything."
 
-    # Sassy
     elif "sassy" in personality.lower():
         if "hello" in user_input or "hi" in user_input:
             return "💅 Oh hey sugar, didn't see you there 😏"
@@ -74,7 +72,6 @@ def get_bot_response(user_input, personality):
         else:
             return "📱 Could be better, but I’m stuck chatting with you 😘"
 
-    # Nerdy
     elif "nerdy" in personality.lower():
         if "hello" in user_input or "hi" in user_input:
             return f"👓 Hello {st.session_state.user_name}! Ready to initiate chat protocol 0x01?"
@@ -87,26 +84,12 @@ def get_bot_response(user_input, personality):
         else:
             return "📖 That’s beyond my current training data. But let’s explore it together!"
 
-# Chat interaction
+# Chat UI
 if st.session_state.user_name:
-    input_container = st.container()
-    with input_container:
-        user_input = st.text_input("💬 Type your message and press Enter", key="input")
+    user_input = st.text_input("💬 Type your message and press Enter", key="input")
 
     if user_input:
         bot_response = get_bot_response(user_input, personality)
         st.session_state.chat_history.append((f"🧍‍♀️ {st.session_state.user_name}", user_input))
         st.session_state.chat_history.append((f"{personality}", bot_response))
         st.experimental_rerun()
-
-from pyngrok import ngrok
-public_url = ngrok.connect(8501)
-print("🌐 App is live at:", public_url)
-
-
-
-
-
-
-
-
