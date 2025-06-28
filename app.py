@@ -122,8 +122,8 @@ if st.session_state.user_name:
     ]
 
     if random.random() < 0.2:  # 20% chance
-    bonus = random.choice(fun_facts)
-    st.session_state.chat_history.append(("✨ ChatBoo Fun Fact", bonus))
+        bonus = random.choice(fun_facts)
+        st.session_state.chat_history.append(("✨ ChatBoo Fun Fact", bonus))
         
         
         # This will update query params as a way to trigger refresh
